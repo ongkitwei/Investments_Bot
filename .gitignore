@@ -1,0 +1,19 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignore virtual environment
+env/
+venv/
+
+# Ignore user/system specific files
+.DS_Store
+*.log
+
+# Ignore credentials or generated data
+*.png
+portfolio.json
+
+# If you're storing API keys or config in a .env file
+.env
