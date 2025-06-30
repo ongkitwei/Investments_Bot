@@ -3,7 +3,7 @@ import telebot
 import json
 from dotenv import load_dotenv
 from datetime import datetime
-from functions import findLastClose, calculatePandL, generate_pie_chart, getTotalCost
+from functions import findLastClose, calculatePandL, generate_pie_chart, getTotalCost, getTotalPortfolio, getTopThreeStocks
 
 with open('portfolio.json', 'r') as file:
     currentPortfolio = json.load(file)
@@ -11,7 +11,6 @@ with open('portfolio.json', 'r') as file:
 today = datetime.today().strftime("%d-%m-%Y")
 
 tickerSymbolArray = ["GOOGL", "ADBE", "AMZN", "NVDA", "ASML", "META", "TSM", "VEEV", "PANW", "SCHG", "UNH"]
-totalCost = getTotalCost(currentPortfolio,tickerSymbolArray)
 
 load_dotenv()
 bot = telebot.TeleBot(os.getenv("BOT_TOKEN"))
@@ -25,13 +24,16 @@ def send_welcome(message):
 @bot.message_handler(commands=['message'])
 def send_welcome(message):
     lastClose = findLastClose(tickerSymbolArray)
+    totalPortfolio = format(getTotalPortfolio(currentPortfolio, lastClose, tickerSymbolArray),",")
+    topThreeStocksPositions = getTopThreeStocks(currentPortfolio, lastClose, tickerSymbolArray)
+
+    lastCloseMessage = "\n\n*LAST CLOSE FOR YOUR STOCK*\n" 
+    pAndLMessage, portfolioPandL = calculatePandL(lastClose, currentPortfolio, tickerSymbolArray)
     fullMessage = f"*KIT WEI'S Investments breakdown as of {today}*\n\n"    
-    infoMessage = f"_Portfolio: xx_\n_P&L (%): xx_\n_No of Stocks: x_\n_Top 3 positions: x, x, x_\n"
-    lastCloseMessage = "\n\n*LAST CLOSE FOR YOUR STOCK*\n\n" 
-    pAndLMessage = calculatePandL(lastClose, currentPortfolio, tickerSymbolArray)
+    infoMessage = f"_Portfolio:_ 💲*{totalPortfolio} USD*\n_P&L:_ 💲*{portfolioPandL} USD*\n_No of Stocks:_ *{len(tickerSymbolArray)}*\n_Top 3 positions: {tickerSymbolArray[topThreeStocksPositions[0]]}, {tickerSymbolArray[topThreeStocksPositions[1]]}, {tickerSymbolArray[topThreeStocksPositions[2]]}_\n"
 
     for index, price in enumerate(lastClose):
-        lastCloseMessage += f"{tickerSymbolArray[index]}: ${round(price,2)}\n"
+        lastCloseMessage += f"{tickerSymbolArray[index]}: ${format(round(price,2),",")}\n"
     
     fullMessage += infoMessage + lastCloseMessage + pAndLMessage
     bot.reply_to(message, fullMessage, parse_mode="Markdown")
@@ -39,6 +41,8 @@ def send_welcome(message):
 # When user sends /portfolio
 @bot.message_handler(commands=['portfolio'])
 def send_welcome(message):
+    lastClose = findLastClose(tickerSymbolArray)
+    totalCost = getTotalCost(currentPortfolio, lastClose, tickerSymbolArray)
     generate_pie_chart(totalCost)
     with open("portfolio_pie.png", "rb") as photo:
         bot.send_photo(message.chat.id, photo, caption="📊 Your Portfolio Breakdown")

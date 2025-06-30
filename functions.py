@@ -17,12 +17,14 @@ def findLastClose(ticker):
     return lastCLoseArray
 
 def calculatePandL(lastClose, portfolio, ticker):
-    pAndLMessage = "\n\n*P&L FOR THE DAY:*\n\n" 
+    pAndLMessage = "\n\n*P&L FOR THE DAY:*\n" 
+    portfolioPandL = 0
     for index, x in enumerate(ticker):
         pAndLPerShare = lastClose[index] - portfolio[ticker[index]]["costPrice"] 
         totalPAndL = round(pAndLPerShare*portfolio[ticker[index]]["noOfShares"], 2)
-        pAndLMessage += f"{ticker[index]}: _{totalPAndL}_\n"
-    return pAndLMessage
+        portfolioPandL += totalPAndL
+        pAndLMessage += f"{ticker[index]}: _{format(totalPAndL,",")}_\n"
+    return pAndLMessage, format(round(portfolioPandL,2),",")
 
 def generate_pie_chart(data_dict, filename="portfolio_pie.png"):
     labels = list(data_dict.keys())
@@ -34,10 +36,25 @@ def generate_pie_chart(data_dict, filename="portfolio_pie.png"):
     plt.savefig(filename)
     plt.close()
 
-def getTotalCost(portfolio, ticker):
+def getTotalCost(portfolio, lastclose, ticker):
     totalCostPrice = {}
     for index, x in enumerate(ticker):
         tickerSymbol = ticker[index]
-        cost = portfolio[tickerSymbol]["costPrice"] * portfolio[tickerSymbol]["noOfShares"]
+        cost = lastclose[index] * portfolio[tickerSymbol]["noOfShares"]
         totalCostPrice[tickerSymbol] = cost
     return totalCostPrice
+
+def getTotalPortfolio(portfolio, lastclose, ticker):
+    totalPortfolio = 0
+    for index, x in enumerate(lastclose):
+        tickerSymbol = ticker[index]
+        totalPortfolio += portfolio[tickerSymbol]["noOfShares"] * lastclose[index]
+    return round(totalPortfolio,2)
+
+def getTopThreeStocks(portfolio, lastclose, ticker):
+    valuePerStock = []
+    for index, x in enumerate(lastclose):
+        valuePerStock.append(portfolio[ticker[index]]["noOfShares"] * lastclose[index])
+    topThreeWithIndices = sorted(enumerate(valuePerStock), key=lambda x: x[1], reverse=True)[:3]
+    topThreePositions = [index for index, value in topThreeWithIndices]
+    return topThreePositions
