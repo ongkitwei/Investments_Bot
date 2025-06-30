@@ -1,0 +1,13 @@
+{
+  "GOOGL": { "costPrice": 135.54, "noOfShares": 32 },
+  "ADBE": { "costPrice": 373.834, "noOfShares": 11 },
+  "AMZN": { "costPrice": 98.74, "noOfShares": 22 },
+  "NVDA": { "costPrice": 123.89, "noOfShares": 19 },
+  "ASML": { "costPrice": 714.4, "noOfShares": 6 },
+  "META": { "costPrice": 138.46, "noOfShares": 5 },
+  "TSM": { "costPrice": 152.45, "noOfShares": 6 },
+  "VEEV": { "costPrice": 167.95, "noOfShares": 10 },
+  "PANW": { "costPrice": 160.79, "noOfShares": 3 },
+  "SCHG": { "costPrice": 27.32, "noOfShares": 45 },
+  "UNH": { "costPrice": 302.54, "noOfShares": 1 }
+}

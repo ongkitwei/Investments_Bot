@@ -13,7 +13,6 @@ venv/
 
 # Ignore credentials or generated data
 *.png
-portfolio.json
 
 # If you're storing API keys or config in a .env file
 .env
