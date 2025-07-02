@@ -33,6 +33,6 @@ fullMessage += infoMessage + lastCloseMessage + pAndLMessage
 totalCost = getTotalCost(currentPortfolio, lastClose, tickerSymbolArray)
 generate_pie_chart(totalCost)
 with open("portfolio_pie.png", "rb") as photo:
-    bot.send_photo(CHAT_ID, photo, caption="📊 Your Portfolio Breakdown {today}")
+    bot.send_photo(CHAT_ID, photo, caption=f"📊 Your Portfolio Breakdown {today}")
 
 bot.send_message(CHAT_ID, fullMessage, parse_mode="Markdown")
