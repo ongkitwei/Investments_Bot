@@ -3,7 +3,7 @@ import telebot
 import json
 from dotenv import load_dotenv
 from datetime import datetime
-from functions import findLastClose, calculatePandL, generate_pie_chart, getTotalCost, getTotalPortfolio, getTopThreeStocks
+from functions import findLastClose, calculatePandL, generate_pie_chart, getTotalCost, getTotalPortfolio, getTopThreeStocks, get_usd_to_sgd
 
 with open('portfolio.json', 'r') as file:
     currentPortfolio = json.load(file)
@@ -25,12 +25,13 @@ def send_welcome(message):
 def send_welcome(message):
     lastClose = findLastClose(tickerSymbolArray)
     totalPortfolio = format(getTotalPortfolio(currentPortfolio, lastClose, tickerSymbolArray),",")
+    totalPortfolioInSGD = format(round(get_usd_to_sgd() * totalPortfolio, 2),",")
     topThreeStocksPositions = getTopThreeStocks(currentPortfolio, lastClose, tickerSymbolArray)
 
     lastCloseMessage = "\n\n*LAST CLOSE FOR YOUR STOCK*\n" 
     pAndLMessage, portfolioPandL = calculatePandL(lastClose, currentPortfolio, tickerSymbolArray)
     fullMessage = f"*KIT WEI'S Investments breakdown as of {today}*\n\n"    
-    infoMessage = f"_Portfolio:_ 💲*{totalPortfolio} USD*\n_P&L:_ 💲*{portfolioPandL} USD*\n_No of Stocks:_ *{len(tickerSymbolArray)}*\n_Top 3 positions: {tickerSymbolArray[topThreeStocksPositions[0]]}, {tickerSymbolArray[topThreeStocksPositions[1]]}, {tickerSymbolArray[topThreeStocksPositions[2]]}_\n"
+    infoMessage = f"_Portfolio:_ 💲*{totalPortfolio} USD | {totalPortfolioInSGD} SGD*\n_P&L:_ 💲*{portfolioPandL} USD | {portfolioPandLInSGD} SGD*\n_No of Stocks:_ *{len(tickerSymbolArray)}*\n_Top 3 positions:_\n 1.{tickerSymbolArray[topThreeStocksPositions[0]]}\n2.{tickerSymbolArray[topThreeStocksPositions[1]]}\n3.{tickerSymbolArray[topThreeStocksPositions[2]]}\n"
 
     for index, price in enumerate(lastClose):
         lastCloseMessage += f"{tickerSymbolArray[index]}: ${format(round(price,2),",")}\n"

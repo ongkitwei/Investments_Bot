@@ -2,6 +2,7 @@ import yfinance as yf
 import matplotlib
 matplotlib.use("Agg") 
 import matplotlib.pyplot as plt
+import requests
 
 def findLastClose(ticker):
     lastCLoseArray = []
@@ -17,13 +18,13 @@ def findLastClose(ticker):
     return lastCLoseArray
 
 def calculatePandL(lastClose, portfolio, ticker):
-    pAndLMessage = "\n\n*P&L FOR THE DAY:*\n" 
+    pAndLMessage = "\n\n*P&L:*\n" 
     portfolioPandL = 0
     for index, x in enumerate(ticker):
         pAndLPerShare = lastClose[index] - portfolio[ticker[index]]["costPrice"] 
         totalPAndL = round(pAndLPerShare*portfolio[ticker[index]]["noOfShares"], 2)
         portfolioPandL += totalPAndL
-        pAndLMessage += f"{ticker[index]}: _{format(totalPAndL,",")}_\n"
+        pAndLMessage += f"{ticker[index]}: _${format(totalPAndL,",")}_\n"
     return pAndLMessage, format(round(portfolioPandL,2),",")
 
 def generate_pie_chart(data_dict, filename="portfolio_pie.png"):
@@ -58,3 +59,10 @@ def getTopThreeStocks(portfolio, lastclose, ticker):
     topThreeWithIndices = sorted(enumerate(valuePerStock), key=lambda x: x[1], reverse=True)[:3]
     topThreePositions = [index for index, value in topThreeWithIndices]
     return topThreePositions
+
+def get_usd_to_sgd():
+    url = "https://api.frankfurter.app/latest?from=USD&to=SGD"
+    response = requests.get(url)
+    data = response.json()
+    rate = data['rates']['SGD']
+    return rate
