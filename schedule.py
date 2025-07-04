@@ -17,7 +17,7 @@ with open('portfolio.json', 'r') as file:
 
 lastClose = findLastClose(tickerSymbolArray)
 totalPortfolio = getTotalPortfolio(currentPortfolio, lastClose, tickerSymbolArray)
-totalPortfolioInSGD = format(round(get_usd_to_sgd() * float(totalPortfolio), 2),",")
+totalPortfolioInSGD = format(round(float(get_usd_to_sgd()) * float(totalPortfolio), 2),",")
 
 topThreeStocksPositions = getTopThreeStocks(currentPortfolio, lastClose, tickerSymbolArray)
 
