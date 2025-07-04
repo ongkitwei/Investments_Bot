@@ -25,7 +25,7 @@ def calculatePandL(lastClose, portfolio, ticker):
         totalPAndL = round(pAndLPerShare*portfolio[ticker[index]]["noOfShares"], 2)
         portfolioPandL += totalPAndL
         pAndLMessage += f"{ticker[index]}: _${format(totalPAndL,",")}_\n"
-    return pAndLMessage, format(round(portfolioPandL,2),",")
+    return pAndLMessage, round(portfolioPandL,2)
 
 def generate_pie_chart(data_dict, filename="portfolio_pie.png"):
     labels = list(data_dict.keys())
