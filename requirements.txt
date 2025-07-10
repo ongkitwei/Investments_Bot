@@ -5,6 +5,7 @@ charset-normalizer==3.4.2
 contourpy==1.3.2
 curl_cffi==0.11.4
 cycler==0.12.1
+finnhub-python==2.4.24
 fonttools==4.58.4
 frozendict==2.4.6
 idna==3.10
