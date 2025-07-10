@@ -5,6 +5,7 @@ import numpy as np
 from datetime import datetime
 from dotenv import load_dotenv
 from functions import findLastClose, calculatePandL, generate_pie_chart, getTotalCost, getTotalPortfolio, getTopThreeStocks, get_usd_to_sgd
+from news import getTopMarketNews
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -36,6 +37,11 @@ for index, price in enumerate(lastClose):
 
 fullMessage += infoMessage + lastCloseMessage + pAndLMessage
 
+# Get top market news
+newsArray = getTopMarketNews()
+newsMessage = f"<b>Top Market News By CNBC</b>\n"
+for x in newsArray:
+    newsMessage += f'<a href="{x["url"]}">{x["headline"]}</a>\n\n'
 
 totalCost = getTotalCost(currentPortfolio, lastClose, tickerSymbolArray)
 generate_pie_chart(totalCost)
@@ -43,3 +49,4 @@ with open("portfolio_pie.png", "rb") as photo:
     bot.send_photo(CHAT_ID, photo, caption=f"📊 Your Portfolio Breakdown {today}")
 
 bot.send_message(CHAT_ID, fullMessage, parse_mode="Markdown")
+bot.send_message(CHAT_ID, newsMessage, parse_mode="HTML", disable_web_page_preview=True)
