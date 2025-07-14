@@ -89,8 +89,8 @@ def calculateIv(ticker):
         fcfDiscountedArray.append(fcfArray[i]/((1+0.063)**(i+1)))
 
     intrinsicValue = ((sum(fcfDiscountedArray) + cashEquiv - totalDebt )/ noOfShares)
-    ivMessage = f"{ticker}: {intrinsicValue.values[0]}\n"
-    print(ticker + str(intrinsicValue.values[0]))
+    ivMessage = f"{ticker}: {round(intrinsicValue.values[0],2)}\n"
+    print(ticker + str(round(intrinsicValue.values[0],2)))
     return ivMessage
 
-calculateIv("SCHG")
+calculateIv("GOOG")
