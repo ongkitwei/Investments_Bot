@@ -4,6 +4,11 @@ from datetime import datetime
 fcfArray = []
 fcfDiscountedArray = []
 
+def getTickerType(tickerSymbol):
+    ticker = yf.Ticker(tickerSymbol)
+    info = ticker.info
+    return info.get("quoteType", "unknown")
+
 def getTtmFcf(tickerSymbol):
     ticker = yf.Ticker(tickerSymbol)
 
@@ -21,7 +26,7 @@ def getTtmFcf(tickerSymbol):
         return ttm_fcf
     except KeyError:
         print("Free Cash Flow row not found in quarterly cash flow.")
-
+        return None
 def getTotalDebt(tickerSymbol):
     ticker = yf.Ticker(tickerSymbol)
     totalDebt = ticker.balance_sheet.loc["Total Debt"][:1]
@@ -56,6 +61,11 @@ def getCurrentYear():
     print(type(currentYear))
 
 def calculateIv(ticker):
+    checkTicker = getTickerType(ticker)
+    if checkTicker != "EQUITY":
+        print(f"{ticker} is not a stock (it's a {checkTicker}). Skipping...")
+        return None
+
     ttmFcf = getTtmFcf(ticker)
     growthEstimate = getGrowthEstimate(ticker)
     cashEquiv = getCashEquiv(ticker)
@@ -83,3 +93,4 @@ def calculateIv(ticker):
     print(ticker + str(intrinsicValue.values[0]))
     return ivMessage
 
+calculateIv("SCHG")
