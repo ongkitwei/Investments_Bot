@@ -55,5 +55,5 @@ for i in tickerSymbolArray:
     ivMessage += ivM
 
 bot.send_message(CHAT_ID, fullMessage, parse_mode="Markdown")
-bot.send.message(CHAT_ID, ivMessage, parse_mode="Markdown")
+bot.send_message(CHAT_ID, ivMessage, parse_mode="Markdown")
 bot.send_message(CHAT_ID, newsMessage, parse_mode="HTML", disable_web_page_preview=True)
