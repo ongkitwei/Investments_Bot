@@ -64,7 +64,7 @@ def calculateIv(ticker):
     checkTicker = getTickerType(ticker)
     if checkTicker != "EQUITY":
         print(f"{ticker} is not a stock (it's a {checkTicker}). Skipping...")
-        return None
+        return f"NO IV FOR {ticker}\n"
 
     ttmFcf = getTtmFcf(ticker)
     growthEstimate = getGrowthEstimate(ticker)
