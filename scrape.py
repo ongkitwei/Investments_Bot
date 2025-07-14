@@ -90,6 +90,8 @@ def calculateIv(ticker):
 
     intrinsicValue = ((sum(fcfDiscountedArray) + cashEquiv - totalDebt )/ noOfShares)
     ivMessage = f"{ticker}: {round(intrinsicValue.values[0],2)}\n"
+    fcfArray.clear()
+    fcfDiscountedArray.clear()
     print(ticker + str(round(intrinsicValue.values[0],2)))
     return ivMessage
 
