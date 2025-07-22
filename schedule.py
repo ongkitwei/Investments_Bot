@@ -14,7 +14,7 @@ CHAT_ID = os.getenv("CHAT_ID")  # hardcode like "123456789" if needed
 
 bot = telebot.TeleBot(TOKEN)
 today = datetime.today().strftime("%d-%m-%Y")
-tickerSymbolArray = ["GOOGL", "ADBE", "AMZN", "NVDA", "ASML", "META", "TSM", "VEEV", "PANW", "SCHG", "UNH"]
+tickerSymbolArray = ["GOOGL", "ADBE", "AMZN", "NVDA", "ASML", "META", "TSM", "VEEV", "PANW", "SCHG", "UNH", "CPRT"]
 with open('portfolio.json', 'r') as file:
     currentPortfolio = json.load(file)
 
