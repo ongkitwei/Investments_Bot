@@ -9,5 +9,6 @@
   "VEEV": { "costPrice": 167.95, "noOfShares": 10 },
   "PANW": { "costPrice": 160.79, "noOfShares": 3 },
   "SCHG": { "costPrice": 27.32, "noOfShares": 45 },
-  "UNH": { "costPrice": 302.54, "noOfShares": 1 }
+  "UNH": { "costPrice": 302.54, "noOfShares": 1 },
+  "CPRT": { "costPrice": 46.00, "noOfShares": 1 }
 }
