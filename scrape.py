@@ -73,7 +73,7 @@ def getTotalShares(tickerSymbol):
 
 def getGrowthEstimate(tickerSymbol):
     ticker = yf.Ticker(tickerSymbol)
-    finvizEpsFiveyear = float(get_eps_next_5y("UNH").replace("%",""))
+    finvizEpsFiveyear = float(get_eps_next_5y(tickerSymbol).replace("%",""))
     growthEstimate = ticker.growth_estimates.loc["+1y","stockTrend"]
     # returnOnEquity = ticker.info.get("returnOnEquity")
     averageGrowthEstimate = round((((growthEstimate*100) + finvizEpsFiveyear)/2),2)
@@ -119,4 +119,3 @@ def calculateIv(ticker):
     ivMessage = f"{ticker}: {round(intrinsicValue.values[0],2)}\n"
     print(ticker + str(round(intrinsicValue.values[0],2)))
     return ivMessage
-
