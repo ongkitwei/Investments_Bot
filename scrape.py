@@ -1,8 +1,33 @@
 import yfinance as yf
 from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 
 fcfArray = []
 fcfDiscountedArray = []
+
+def get_eps_next_5y(ticker):
+    url = f"https://finviz.com/quote.ashx?t={ticker}&ty=c&ta=1&p=d"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    }
+
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    try:
+        table = soup.find("table", class_="snapshot-table2")
+        rows = table.find_all("tr")
+        for row in rows:
+            cells = row.find_all("td")
+            for i in range(0, len(cells), 2):
+                key = cells[i].text.strip()
+                value = cells[i + 1].text.strip()
+                if key == "EPS next 5Y":
+                    return value
+        return "EPS next 5Y not found"
+    except Exception as e:
+        return f"Error: {e}"
 
 def getTickerType(tickerSymbol):
     ticker = yf.Ticker(tickerSymbol)
@@ -27,6 +52,7 @@ def getTtmFcf(tickerSymbol):
     except KeyError:
         print("Free Cash Flow row not found in quarterly cash flow.")
         return None
+    
 def getTotalDebt(tickerSymbol):
     ticker = yf.Ticker(tickerSymbol)
     totalDebt = ticker.balance_sheet.loc["Total Debt"][:1]
@@ -47,9 +73,10 @@ def getTotalShares(tickerSymbol):
 
 def getGrowthEstimate(tickerSymbol):
     ticker = yf.Ticker(tickerSymbol)
+    finvizEpsFiveyear = float(get_eps_next_5y("UNH").replace("%",""))
     growthEstimate = ticker.growth_estimates.loc["+1y","stockTrend"]
-    returnOnEquity = ticker.info.get("returnOnEquity")
-    averageGrowthEstimate = round((((growthEstimate + returnOnEquity)/2)*100),2)
+    # returnOnEquity = ticker.info.get("returnOnEquity")
+    averageGrowthEstimate = round((((growthEstimate*100) + finvizEpsFiveyear)/2),2)
     if averageGrowthEstimate > 25:
         return 25
     else:
@@ -90,9 +117,6 @@ def calculateIv(ticker):
 
     intrinsicValue = ((sum(fcfDiscountedArray) + cashEquiv - totalDebt )/ noOfShares)
     ivMessage = f"{ticker}: {round(intrinsicValue.values[0],2)}\n"
-    fcfArray.clear()
-    fcfDiscountedArray.clear()
     print(ticker + str(round(intrinsicValue.values[0],2)))
     return ivMessage
 
-calculateIv("GOOG")
