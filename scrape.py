@@ -3,9 +3,6 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
-fcfArray = []
-fcfDiscountedArray = []
-
 def get_eps_next_5y(ticker):
     url = f"https://finviz.com/quote.ashx?t={ticker}&ty=c&ta=1&p=d"
     headers = {
@@ -88,6 +85,8 @@ def getCurrentYear():
     print(type(currentYear))
 
 def calculateIv(ticker):
+    fcfArray = []
+    fcfDiscountedArray = []
     checkTicker = getTickerType(ticker)
     if checkTicker != "EQUITY":
         print(f"{ticker} is not a stock (it's a {checkTicker}). Skipping...")
