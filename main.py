@@ -10,7 +10,7 @@ with open('portfolio.json', 'r') as file:
 
 today = datetime.today().strftime("%d-%m-%Y")
 
-tickerSymbolArray = ["GOOGL", "ADBE", "AMZN", "NVDA", "ASML", "META", "TSM", "VEEV", "PANW", "SCHG", "UNH", "CPRT"]
+tickerSymbolArray = ["GOOGL", "ADBE", "AMZN", "NVDA", "ASML", "META", "TSM", "VEEV", "PANW", "SCHG", "UNH", "CPRT", "FTNT", "NVO", "DUOL", "HCC"]
 
 load_dotenv()
 bot = telebot.TeleBot(os.getenv("BOT_TOKEN"))
